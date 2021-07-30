@@ -16,16 +16,16 @@ import java.util.Map;
 
 public class KamstrupStrategy extends DefaultStrategy {
 
-//    private KamstrupService kamstrupService;
+    private KamstrupService kamstrupService;
 
     public KamstrupStrategy(SigfoxData sigfoxData) {
         super(sigfoxData);
     }
 
-//    @Autowired
-//    public void setKamstrupService(KamstrupService kamstrupService) {
-//        this.kamstrupService = kamstrupService;
-//    }
+    @Autowired
+    public void setKamstrupService(KamstrupService kamstrupService) {
+        this.kamstrupService = kamstrupService;
+    }
 
     public static byte[] decrypt(String input, String dec, String iv) {
         byte[] plainText = null;
