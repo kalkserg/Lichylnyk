@@ -1,7 +1,21 @@
 package ua.utilix.controller;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,9 +36,12 @@ import ua.utilix.service.UserService;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 @Controller
 public class myController {
@@ -138,7 +155,37 @@ public class myController {
                             sigfoxData.getErrorLeak().equals(Sigfox.TypeError.LEAK) ||
                             sigfoxData.getErrorMagnet().equals(Sigfox.TypeError.MAGNETE) ||
                             sigfoxData.getErrorReverse().equals(Sigfox.TypeError.REVERSE)) {
-                        sendMessageService.sending("\u26A0"+sigfoxData.toString(), device.getChatId());
+
+                        String user = "6107a6e641758161bc41ddd0";
+                        String pwd = "abea5dd6ead1c6e14b6ada4a02bd9e2e";
+                        Double latitude = 0.;
+                        Double longitude = 0.;
+                        CredentialsProvider provider = new BasicCredentialsProvider();
+                        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, pwd);
+                        provider.setCredentials(AuthScope.ANY, credentials);
+                        HttpClient client = HttpClientBuilder.create()
+                                .setDefaultCredentialsProvider(provider)
+                                .build();
+                        HttpResponse response = client.execute(new HttpGet("https://api.sigfox.com/v2/devices/" + sigfoxId));
+                        //HttpResponse response = client.execute(new HttpGet("https://api.sigfox.com/v2/devices/32FFCE"));
+                        int statusCode = response.getStatusLine().getStatusCode();
+                        System.out.println(statusCode);
+                        if(statusCode==200) {
+                            // CONVERT RESPONSE TO STRING
+                            String result = EntityUtils.toString(response.getEntity());
+                            JSONObject objResponse = new JSONObject(result);
+                            try {
+                                latitude = objResponse.getJSONObject("location").getDouble("lat");
+                                longitude = objResponse.getJSONObject("location").getDouble("lng");
+                            } catch (Exception ex) {
+                                //do nothing
+                            }
+                        }
+
+                        String coordinateHref = latitude!=0&&longitude!=0?"\n<a href=\"https://www.google.com/maps/place/" + latitude + "," + longitude + "\"><b>Показати положення на мапі </b></a>":"";
+                        String message = "\u26A0" + sigfoxData.toString() + coordinateHref;
+                        System.out.println(message);
+                        sendMessageService.sending(message, device.getChatId());
                     }else {
                         //All messages No err
                         if (device.getAllMessage() == true) {

@@ -29,5 +29,4 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     @Query("SELECT d FROM Device d WHERE d.notified = true AND d.allMessage = false " +
             "AND d.sigfoxId IS NOT NULL AND d.chatId = ?1")
     List<Device> findByChatIdErrMessageDevices(long chatId);
-
 }

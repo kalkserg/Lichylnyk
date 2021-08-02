@@ -1,5 +1,7 @@
 package ua.utilix.model.strategy;
 
+import ua.utilix.model.SigfoxData;
+
 import java.util.*;
 
 public class Water5Strategy extends DefaultStrategy {
