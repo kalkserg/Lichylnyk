@@ -1,11 +1,22 @@
 package sigfox;
 
 import ua.utilix.model.SigfoxData;
+import ua.utilix.model.Water5;
 
 public interface Sigfox {
 
     default SigfoxData parse(String id, String input, int sequence) {
-        System.out.println("Лічильник " + id + ". Невідомий тип лічильника. Данні: " + input);
+        System.out.println("default Лічильник " + id + ". Невідомий тип лічильника. Данні: " + input);
+        return null;
+    }
+
+    default SigfoxData parse(String id, String input, int sequence, Water5 startValue) {
+        System.out.println("Water5 Лічильник " + id + ". Невідомий тип лічильника. Данні: " + input);
+        return null;
+    }
+
+    default SigfoxData parse(String id, String input, int sequence, String dec) {
+        System.out.println("Kamstrup Лічильник " + id + ". Невідомий тип лічильника. Данні: " + input);
         return null;
     }
 

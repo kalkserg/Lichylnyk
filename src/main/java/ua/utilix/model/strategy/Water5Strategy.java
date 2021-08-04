@@ -1,89 +1,64 @@
 package ua.utilix.model.strategy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ua.utilix.model.SigfoxData;
+import ua.utilix.model.Water5;
+import ua.utilix.service.Water5Service;
 
 import java.util.*;
 
 public class Water5Strategy extends DefaultStrategy {
 
-    private static Map<String, List<String>> initial = new HashMap<>();
+    private static Map<String, List<Integer>> mapRawValue = new HashMap<>();
 
     public Water5Strategy(SigfoxData sigfoxData) {
         super(sigfoxData);
-        makeInitial();
     }
 
-    private static void makeInitial() {
-        //for test
-        //channel1
-        //0 - inital impuls
-        //1 - impuls per m.cub
-        //2 - inital m.cub
-        //3 - raw value channel 1
-        //channel2
-        //4 - inital impuls
-        //5 - impuls per m.cub
-        //6 - inital m.cub
-        //7 - raw value channel 2
-        initial.put("216D4A8", new ArrayList<String>(Arrays.asList("0","1000","31.325","0",   "0","100","31.02","0"))); //двухканальний jupiter
-        initial.put("216D4A9", new ArrayList<String>(Arrays.asList("0","100","0","0",   "0","100","0","0"))); //двухканальний jupiter
-        initial.put("216D4AA", new ArrayList<String>(Arrays.asList("0","100","0","0",   "0","100","0","0"))); //двухканальний jupiter
-        initial.put("216D494", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D499", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D497", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D498", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D49E", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D495", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D4A7", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("216D4A2", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-        initial.put("1B3128B", new ArrayList<String>(Arrays.asList("0","1000","0","0"))); //одноканальний FLUO
-
-    }
-
-    private static void setRawValue(String id, String val, int chan) {
-        for (Map.Entry<String, List<String>> pair : initial.entrySet()) {
+    private static void setRawValue(String id, Integer val, int chan) {
+        for (Map.Entry<String, List<Integer>> pair : mapRawValue.entrySet()) {
             if (pair.getKey().equals(id)) {
-                List<String> list = getInitial(id);
-                if(chan==1) list.set(3,val);
-                else list.set(7,val);
-                initial.put(id,list);
+                List<Integer> list = getInitial(id);
+                if(chan==1) list.set(0,val);
+                else list.set(1,val);
+                mapRawValue.replace(id,list);
             }
         }
     }
 
-    private static List<String> getInitial(String id) {
-        //0 - inital impuls 1
-        //1 - impuls per m.cub 1
-        //2 - inital m.cub 1
-        //3 - raw value channel 1
-        //4 - inital impuls 2
-        //5 - impuls per m.cub 2
-        //6 - inital m.cub 2
-        //7 - raw value channel 2
-        for (Map.Entry<String, List<String>> pair : initial.entrySet()) {
+    private static List<Integer> getInitial(String id) {
+// 0 - raw value channel 1
+// 1 - raw value channel 2
+        for (Map.Entry<String, List<Integer>> pair : mapRawValue.entrySet()) {
             if (pair.getKey().equals(id)) return pair.getValue();
         }
         return null;
     }
 
-    public SigfoxData parse(String id, String input, int sequence) {
+    public SigfoxData parse(String id, String input, int sequence, Water5 startValue) {
         int numChannels;
-        List<String> startValue = getInitial(id);
-        int initImpuls,initImpuls1,initImpuls2 = 0;
-        int rawValue,rawValue1,rawValue2 = 0;
-        double impulsPerMCub,impulsPerMCub1,impulsPerMCub2 = 0;
-        float initMCub,initMCub1,initMCub2 = 0;
+//        Water5 startValue = getInitial(id);
+        int initImpuls, initImpuls1, initImpuls2 = 0;
+        int rawValue, rawValue1, rawValue2 = 0;
+        int impulsPerMCub, impulsPerMCub1, impulsPerMCub2 = 0;
+        float initMCub, initMCub1, initMCub2 = 0;
+
+        List<Integer> rawValues = getInitial(id);
+        if (rawValues == null){
+            rawValues = new ArrayList<Integer>(Arrays.asList(0, 0));
+            mapRawValue.put(id, rawValues);
+        }
         //chan1
-        initImpuls1 = Integer.parseInt(startValue.get(0));
-        impulsPerMCub1 = Integer.parseInt(startValue.get(1));
-        initMCub1 = Float.parseFloat(startValue.get(2));
-        rawValue1 = Integer.parseInt(startValue.get(3));
+        initImpuls1 = startValue.getInitialImpuls1();
+        impulsPerMCub1 = startValue.getImpulsPerCub1();
+        initMCub1 = startValue.getInitialMCub1();
+        rawValue1 = rawValues.get(0);
         //chan2
         try {
-            initImpuls2 = Integer.parseInt(startValue.get(4));
-            impulsPerMCub2 = Integer.parseInt(startValue.get(5));
-            initMCub2 = Float.parseFloat(startValue.get(6));
-            rawValue2 = Integer.parseInt(startValue.get(7));
+            initImpuls2 = startValue.getInitialImpuls2();
+            impulsPerMCub2 = startValue.getImpulsPerCub2();
+            initMCub2 = startValue.getInitialMCub2();
+            rawValue2 = rawValues.get(1);
             numChannels = 2;
         }catch (Exception e){
             numChannels = 1;
@@ -118,7 +93,7 @@ public class Water5Strategy extends DefaultStrategy {
             int newValue = ((bytes[0] & 0xFF) | ((bytes[1] & 0xFF) << 8)) >> 1;
             if (newValue > lo) rawValue = hi + newValue;
             else rawValue = rawValue + newValue + (lo==0?0:(0x8000-lo));
-            setRawValue(id,String.valueOf(rawValue),chan);
+            setRawValue(id,rawValue,chan);
             sigfoxData.setValue((rawValue - initImpuls)/impulsPerMCub+initMCub);
             sigfoxData.setType(TypeMessage.DAILY);
             sigfoxData.setSendCounter(0);
@@ -137,7 +112,7 @@ public class Water5Strategy extends DefaultStrategy {
                 impulsPerMCub = impulsPerMCub2;
                 initMCub = initMCub2;
             }
-            setRawValue(id,String.valueOf(newValue),chan);
+            setRawValue(id,newValue,chan);
             sigfoxData.setValue((newValue - initImpuls)/impulsPerMCub+initMCub);
             sigfoxData.setType(TypeMessage.INFO);
             sigfoxData.setSendCounter((bytes[5] & 0xFF) | ((bytes[6] & 0xFF) << 8));
@@ -177,7 +152,7 @@ public class Water5Strategy extends DefaultStrategy {
                 initMCub = initMCub2;
             }
             int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0x07) << 24) ;
-            setRawValue(id,String.valueOf(newValue),chan);
+            setRawValue(id,newValue,chan);
             sigfoxData.setValue((newValue - initImpuls)/impulsPerMCub+initMCub);
             sigfoxData.setType(TypeMessage.WEEKLY);
             sigfoxData.setSendCounter(0);
@@ -209,7 +184,7 @@ public class Water5Strategy extends DefaultStrategy {
                     initMCub = initMCub2;
                 }
                 int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0xFF) << 24);
-                setRawValue(id, String.valueOf(newValue), chan);
+                setRawValue(id, newValue, chan);
                 sigfoxData.setValue((newValue - initImpuls) / impulsPerMCub + initMCub);
                 sigfoxData.setType(TypeMessage.COMMAND);
                 sigfoxData.setSendCounter(0);
@@ -233,7 +208,7 @@ public class Water5Strategy extends DefaultStrategy {
                 initMCub = initMCub2;
             }
             int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0xFF) << 24);
-            setRawValue(id,String.valueOf(newValue),chan);
+            setRawValue(id,newValue,chan);
             sigfoxData.setValue((newValue - initImpuls)/impulsPerMCub+initMCub);
             sigfoxData.setType(TypeMessage.HOURLY);
             sigfoxData.setSendCounter(0);
@@ -253,7 +228,7 @@ public class Water5Strategy extends DefaultStrategy {
                 initMCub = initMCub2;
             }
             int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0xFF) << 24);
-            setRawValue(id,String.valueOf(newValue),chan);
+            setRawValue(id,newValue,chan);
             sigfoxData.setValue((newValue - initImpuls)/impulsPerMCub+initMCub);
             sigfoxData.setType(TypeMessage.RESET);
             sigfoxData.setSendCounter(0);

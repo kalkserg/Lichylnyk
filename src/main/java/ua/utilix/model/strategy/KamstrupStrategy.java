@@ -11,20 +11,26 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//@Controller
 public class KamstrupStrategy extends DefaultStrategy {
 
-    private KamstrupService kamstrupService;
+//    @Autowired
+//    private KamstrupService kamstrupService;
+
+//    kamstrupService = ((KamstrupService) kamstrupService).getUsername();
+
+//    @Autowired
+//    public void setmmmmService(KamstrupService kamstrupService) {
+//        this.kamstrupService = kamstrupService;
+//    }
 
     public KamstrupStrategy(SigfoxData sigfoxData) {
         super(sigfoxData);
-    }
-
-    @Autowired
-    public void setKamstrupService(KamstrupService kamstrupService) {
-        this.kamstrupService = kamstrupService;
     }
 
     public static byte[] decrypt(String input, String dec, String iv) {
@@ -52,9 +58,10 @@ public class KamstrupStrategy extends DefaultStrategy {
         return iv;
     }
 
-    private String getDec(String id) {
+//    private String getDec(String id) {
 //        Kamstrup kamstrup;
 //        String dec = null;
+//        System.out.println("kamstrupService " + kamstrupService);
 //        try {
 //            System.out.println("__");
 //            kamstrupService.find();
@@ -67,58 +74,58 @@ public class KamstrupStrategy extends DefaultStrategy {
 //            System.out.println(ex);
 //        }
 //
-//        try {
-//            System.out.println("__");
-//            kamstrup = kamstrupService.findDecodeKey("AA");
-//            System.out.println(kamstrup.getSigfoxId() + " " + kamstrup.getDecodeKey());
-//            System.out.println("________");
-//            dec = kamstrup.getDecodeKey();
-//        } catch (Exception ex) {
-//            System.out.println(ex.getMessage());
-//        }
+////        try {
+////            System.out.println("__");
+////            kamstrup = kamstrupService.findDecodeKey("AA");
+////            System.out.println(kamstrup.getSigfoxId() + " " + kamstrup.getDecodeKey());
+////            System.out.println("________");
+////            dec = kamstrup.getDecodeKey();
+////        } catch (Exception ex) {
+////            System.out.println(ex.getMessage());
+////        }
 //        return dec;
 
-        Map<String, String> dec;
-        dec = new HashMap<>();
-        dec.put("2176A3A", "EF2774E3EBE678589B1B51A31F068D57");
-        dec.put("2176A48", "8185A73AEEEE95BD46232924447481CA");
-        dec.put("2176A3C", "047253B40DD4FA47AD907E64A1E46082");
-        dec.put("2176A3D", "9782E386F5913D07CB7B113A2FE08191");
-        dec.put("2176A3E", "9FED22647A759381BE8E1C955DE6E093");
-        dec.put("2176A3F", "2DCBEFB449F653E087EBC61BE18D3136");
-        dec.put("2176A40", "631317A11E1EC0D56A448CCA7E99B076");
-        dec.put("2176A41", "18679182D0A3527CD8C4A3ACEEBB0DEF");
-        dec.put("2176A42", "27452D8180924F85F6B02F66E92EF0B0");
-        dec.put("2176A43", "D06B09266187976E83E82756FFAC9DAE");
-        dec.put("2176A44", "8F4D1C88B4771A1DFD6AD8DF022AB1BD");
-        dec.put("2176A45", "81BF3FE3FEF64D8614E4EEC5B1CEC835");
-        dec.put("2176A46", "D2F8EBD2735839DEDE349CA4624F8981");
-        dec.put("2176A47", "C2356C3F2FEE1AB0FF154130355247D6");
-        dec.put("2176A49", "931EEABBB26A4A26DAE6F85382A34EC2");
-        dec.put("2176A4A", "9CF5E353F2E771452459B13CECE1B0B7");
-        dec.put("2176A4B", "574BA23273512AC745E3F6E16BA1B5F1");
-        dec.put("2176A58", "5DB62E656483782B521300F302AEE915");
-        dec.put("2176A4D", "A932ACBFF4DDB3E656122FDC57A69349");
-        dec.put("2176A4E", "64030C2DA65C50A88723BDD9B22ED4F0");
-        dec.put("2176A4F", "D259F3B9B5FCD0CE3CF189E70E82D8E7");
-        dec.put("2176A50", "9AED45C75631678112138CF9D3CB3119");
-        dec.put("2176A51", "4722BF08B3B4FDB42CF431DE3F821C72");
-        dec.put("2176A52", "F2201FAA2EDBDB1EE014496020D813C6");
-        dec.put("2176A53", "112903C4E14D5C5C0FD8B143A103ABF4");
-        dec.put("2176A54", "27791BBCB2F0531B815742BE1CB2FE47");
-        dec.put("2176A55", "27AE12C3801A56B05D192D068659266A");
-        dec.put("2176A56", "9658EB41F9698C17CCB393D07E58778F");
-        dec.put("2176A57", "8BC33C422874B289222BE75960E691AD");
-        dec.put("2176A59", "0F1853619AA6FD7A3D946C179E026B93");
+//        Map<String, String> dec;
+//        dec = new HashMap<>();
+//        dec.put("2176A3A", "EF2774E3EBE678589B1B51A31F068D57");
+//        dec.put("2176A48", "8185A73AEEEE95BD46232924447481CA");
+//        dec.put("2176A3C", "047253B40DD4FA47AD907E64A1E46082");
+//        dec.put("2176A3D", "9782E386F5913D07CB7B113A2FE08191");
+//        dec.put("2176A3E", "9FED22647A759381BE8E1C955DE6E093");
+//        dec.put("2176A3F", "2DCBEFB449F653E087EBC61BE18D3136");
+//        dec.put("2176A40", "631317A11E1EC0D56A448CCA7E99B076");
+//        dec.put("2176A41", "18679182D0A3527CD8C4A3ACEEBB0DEF");
+//        dec.put("2176A42", "27452D8180924F85F6B02F66E92EF0B0");
+//        dec.put("2176A43", "D06B09266187976E83E82756FFAC9DAE");
+//        dec.put("2176A44", "8F4D1C88B4771A1DFD6AD8DF022AB1BD");
+//        dec.put("2176A45", "81BF3FE3FEF64D8614E4EEC5B1CEC835");
+//        dec.put("2176A46", "D2F8EBD2735839DEDE349CA4624F8981");
+//        dec.put("2176A47", "C2356C3F2FEE1AB0FF154130355247D6");
+//        dec.put("2176A49", "931EEABBB26A4A26DAE6F85382A34EC2");
+//        dec.put("2176A4A", "9CF5E353F2E771452459B13CECE1B0B7");
+//        dec.put("2176A4B", "574BA23273512AC745E3F6E16BA1B5F1");
+//        dec.put("2176A58", "5DB62E656483782B521300F302AEE915");
+//        dec.put("2176A4D", "A932ACBFF4DDB3E656122FDC57A69349");
+//        dec.put("2176A4E", "64030C2DA65C50A88723BDD9B22ED4F0");
+//        dec.put("2176A4F", "D259F3B9B5FCD0CE3CF189E70E82D8E7");
+//        dec.put("2176A50", "9AED45C75631678112138CF9D3CB3119");
+//        dec.put("2176A51", "4722BF08B3B4FDB42CF431DE3F821C72");
+//        dec.put("2176A52", "F2201FAA2EDBDB1EE014496020D813C6");
+//        dec.put("2176A53", "112903C4E14D5C5C0FD8B143A103ABF4");
+//        dec.put("2176A54", "27791BBCB2F0531B815742BE1CB2FE47");
+//        dec.put("2176A55", "27AE12C3801A56B05D192D068659266A");
+//        dec.put("2176A56", "9658EB41F9698C17CCB393D07E58778F");
+//        dec.put("2176A57", "8BC33C422874B289222BE75960E691AD");
+//        dec.put("2176A59", "0F1853619AA6FD7A3D946C179E026B93");
+//
+//        for (Map.Entry<String, String> pair : dec.entrySet()) {
+//            if (pair.getKey().equals(id)) return pair.getValue();
+//        }
+//        return null;
+//    }
 
-        for (Map.Entry<String, String> pair : dec.entrySet()) {
-            if (pair.getKey().equals(id)) return pair.getValue();
-        }
-        return null;
-    }
-
-    public SigfoxData parse(String id, String input, int sequence) {
-        String dec = getDec(id);
+    public SigfoxData parse(String id, String input, int sequence, String dec) {
+        //String dec = getDec(id);
 
         byte[] bytes = asBytes(input);
         boolean dry = false;

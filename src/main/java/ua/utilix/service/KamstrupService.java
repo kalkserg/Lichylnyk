@@ -16,12 +16,7 @@ public class KamstrupService {
 
     @Transactional
     public Kamstrup findDecodeKey(String sigfoxId) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAA " + sigfoxId);
         return kamstrupRepository.findDecodeKey(sigfoxId);
-    }
-
-    public void find() {
-        System.out.println("BBBBBBBBBBBBBBBBBBBB ");
     }
 }
 

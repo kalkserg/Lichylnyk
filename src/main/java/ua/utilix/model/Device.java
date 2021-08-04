@@ -16,6 +16,7 @@ public class Device {
     private Integer stateId;
     private Boolean allMessage;
     private Boolean notified = false;
+//    private String dec = "";
 
     public Device() {
     }
@@ -88,4 +89,12 @@ public class Device {
     public void setAllMessage(boolean allMessage) {
         this.allMessage = allMessage;
     }
+
+//    public String getDec() {
+//        return dec;
+//    }
+//
+//    public void setDec(String dec) {
+//        this.dec = dec;
+//    }
 }
