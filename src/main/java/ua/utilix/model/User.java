@@ -19,7 +19,7 @@ public class User {
     public User() {
     }
 
-    public User(Long chatId,Integer stateId) {
+    public User(Long chatId, Integer stateId) {
         this.chatId = chatId;
         this.stateId = stateId;
     }

@@ -2,7 +2,6 @@ package ua.utilix.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ua.utilix.model.Kamstrup;
 import ua.utilix.model.Water5;
 
 public interface Water5Repository extends JpaRepository<Water5, Long> {

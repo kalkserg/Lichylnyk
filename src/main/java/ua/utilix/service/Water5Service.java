@@ -2,9 +2,7 @@ package ua.utilix.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.utilix.model.Kamstrup;
 import ua.utilix.model.Water5;
-import ua.utilix.repo.KamstrupRepository;
 import ua.utilix.repo.Water5Repository;
 
 @Service

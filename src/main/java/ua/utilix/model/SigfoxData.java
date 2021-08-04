@@ -207,7 +207,7 @@ public class SigfoxData implements Sigfox {
 
     public void setBatteryPower(byte batteryPower) {
         //  U = 2 + (bytes[7]>>7) + (bytes[7]&0x7F)/100.
-        float k = (float) (2 + (batteryPower >> 7) + (batteryPower & 0x7F) / 100.);
+        float k = (float) (2 + ((batteryPower & 0xFF) >> 7) + (batteryPower & 0x7F) / 100.);
         this.batteryPower = (float) Math.round(k * 100) / 100;
     }
 
