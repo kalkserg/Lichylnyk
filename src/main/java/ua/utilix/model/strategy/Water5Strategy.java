@@ -92,7 +92,7 @@ public class Water5Strategy extends DefaultStrategy {
             if (newValue > lo) rawValue = hi + newValue;
             else rawValue = rawValue + newValue + (lo == 0 ? 0 : (0x8000 - lo));
             setRawValue(id, rawValue, chan);
-            sigfoxData.setValue((rawValue - initImpuls) / impulsPerMCub + initMCub);
+            sigfoxData.setValue((double)(rawValue - initImpuls) / impulsPerMCub + initMCub);
             sigfoxData.setType(TypeMessage.DAILY);
             sigfoxData.setSendCounter(0);
 
@@ -111,7 +111,7 @@ public class Water5Strategy extends DefaultStrategy {
                 initMCub = initMCub2;
             }
             setRawValue(id, newValue, chan);
-            sigfoxData.setValue((newValue - initImpuls) / impulsPerMCub + initMCub);
+            sigfoxData.setValue((double)(newValue - initImpuls) / impulsPerMCub + initMCub);
             sigfoxData.setType(TypeMessage.INFO);
             sigfoxData.setSendCounter((bytes[5] & 0xFF) | ((bytes[6] & 0xFF) << 8));
             sigfoxData.setRadioPowerInfo(((bytes[7] & 0xC0)) >> 6);
@@ -121,7 +121,7 @@ public class Water5Strategy extends DefaultStrategy {
         } else if (bytes[0] == (byte) 0x81 | bytes[0] == (byte) 0x89) {
             //Contains information about the hardware and software version, temperature inside the device, battery voltage, RF output level, and maximum recorded flow.
             //Sent instead of every sixth monthly message.
-            sigfoxData.setValue(0);
+            sigfoxData.setValue(0.);
             sigfoxData.setType(TypeMessage.EXTENDED);
             sigfoxData.setSendCounter(0);
             sigfoxData.setHardwareRev(bytes[1]);
@@ -150,11 +150,15 @@ public class Water5Strategy extends DefaultStrategy {
                 initMCub = initMCub2;
             }
             int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0x07) << 24);
+            System.out.println("newValue " + newValue);
+            System.out.println("initImpuls " + initImpuls);
+            System.out.println("impulsPerMCub " + impulsPerMCub);
+            System.out.println("initMCub " + initMCub);
             setRawValue(id, newValue, chan);
-            sigfoxData.setValue((newValue - initImpuls) / impulsPerMCub + initMCub);
+            sigfoxData.setValue((double)(newValue - initImpuls) / impulsPerMCub + initMCub);
             sigfoxData.setType(TypeMessage.WEEKLY);
             sigfoxData.setSendCounter(0);
-            sigfoxData.setBatteryPower((byte) bytes[7]);
+            sigfoxData.setBatteryPower(bytes[7]);
             sigfoxData.setChan(String.valueOf(chan));
 
 
@@ -183,7 +187,7 @@ public class Water5Strategy extends DefaultStrategy {
                 }
                 int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0xFF) << 24);
                 setRawValue(id, newValue, chan);
-                sigfoxData.setValue((newValue - initImpuls) / impulsPerMCub + initMCub);
+                sigfoxData.setValue((double)(newValue - initImpuls) / impulsPerMCub + initMCub);
                 sigfoxData.setType(TypeMessage.COMMAND);
                 sigfoxData.setSendCounter(0);
                 //int commandNumber = bytes[5];
@@ -207,7 +211,7 @@ public class Water5Strategy extends DefaultStrategy {
             }
             int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0xFF) << 24);
             setRawValue(id, newValue, chan);
-            sigfoxData.setValue((newValue - initImpuls) / impulsPerMCub + initMCub);
+            sigfoxData.setValue((double)(newValue - initImpuls) / impulsPerMCub + initMCub);
             sigfoxData.setType(TypeMessage.HOURLY);
             sigfoxData.setSendCounter(0);
             sigfoxData.setChan(String.valueOf(chan));
@@ -227,7 +231,7 @@ public class Water5Strategy extends DefaultStrategy {
             }
             int newValue = (bytes[1] & 0xFF) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF) << 16) | ((bytes[4] & 0xFF) << 24);
             setRawValue(id, newValue, chan);
-            sigfoxData.setValue((newValue - initImpuls) / impulsPerMCub + initMCub);
+            sigfoxData.setValue((double)(newValue - initImpuls) / impulsPerMCub + initMCub);
             sigfoxData.setType(TypeMessage.RESET);
             sigfoxData.setSendCounter(0);
             sigfoxData.setHardwareRev(bytes[5] & 0xFF);
