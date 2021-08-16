@@ -82,7 +82,7 @@ public enum DeviceState {
         private DeviceState next;
         @Override
         public void enter(DeviceContext deviceContext, Handler handler) {
-            sendMessage(handler, deviceContext, "Введіть тип личильника: 1-Kamstrup, 2-Water5");
+            sendMessage(handler, deviceContext, "Введіть тип личильника: 1-Kamstrup, 2-Water5, 3-Bove");
         }
 
         @Override
@@ -95,6 +95,10 @@ public enum DeviceState {
             }else
             if(str.matches("2")) {
                 deviceContext.getDevice().setProtocol("Water5");
+                next = Registred;
+            }else
+            if(str.matches("3")) {
+                deviceContext.getDevice().setProtocol("Bove");
                 next = Registred;
             }else{
                 sendMessage(handler, deviceContext, "Невірний тип личильника!");

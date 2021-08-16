@@ -15,6 +15,16 @@ public class DefaultStrategy implements Sigfox {
         sigfoxData.setErrorDry(TypeError.NOERROR);
         sigfoxData.setErrorReverse(TypeError.NOERROR);
         sigfoxData.setErrorMagnet(TypeError.NOERROR);
+        sigfoxData.setErrorTamper(TypeError.NOERROR);
+        sigfoxData.setErrorFreezing(TypeError.NOERROR);
+        sigfoxData.setErrorBatteryAlarm(TypeError.NOERROR);
+        sigfoxData.setErrorOverRange(TypeError.NOERROR);
+        sigfoxData.setErrorTemperatureAlarm(TypeError.NOERROR);
+        sigfoxData.setErrorEEPROM(TypeError.NOERROR);
+        sigfoxData.setErrorSensorbreak(TypeError.NOERROR);
+        sigfoxData.setErrorShortcircuit(TypeError.NOERROR);
+        sigfoxData.setErrorTemperatureless(TypeError.NOERROR);
+        sigfoxData.setErrorTemperaturemore(TypeError.NOERROR);
         sigfoxData.setValue(0);
         sigfoxData.setType(null);
         sigfoxData.setSendCounter(0);

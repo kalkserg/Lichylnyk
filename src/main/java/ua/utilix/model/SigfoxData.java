@@ -11,7 +11,7 @@ import static java.lang.String.format;
 
 @Component
 public class SigfoxData implements Sigfox {
-    private Sigfox strategy;
+    private sigfox.Sigfox strategy;
     private double value;
     private TypeMessage type;
     private int sendCounter;
@@ -20,6 +20,7 @@ public class SigfoxData implements Sigfox {
     private int units;
     private String chan;
 
+    private String interval;
     private int hardwareRev;
     private int softwareRev;
     private String div = "";
@@ -38,6 +39,25 @@ public class SigfoxData implements Sigfox {
     private TypeError errorDry;
     private TypeError errorReverse;
     private TypeError errorLeak;
+    //Bove
+    private TypeError errorTamper;
+    private TypeError errorFreezing;
+    private TypeError errorBatteryAlarm;
+    private TypeError errorOverRange;
+    private TypeError errorTemperatureAlarm;
+    private TypeError errorEEPROM;
+    private TypeError errorShortcircuit;
+    private TypeError errorSensorbreak;
+    private TypeError errorTemperatureless;
+    private TypeError errorTemperaturemore;
+
+    public String getInterval() {
+        return interval;
+    }
+
+    public void setInterval(String interval) {
+        this.interval = !interval.equals("0")?" "+ interval + " минут.":".";
+    }
 
     public String getMinFlow() {
         return minFlow;
@@ -105,6 +125,7 @@ public class SigfoxData implements Sigfox {
         if(units == 0 ) tmp = " м.куб. ";
         else if(units == 1 ) tmp = " фут.куб. ";
         else if(units == 2 ) tmp = " галон. ";
+        else if(units == 10 ) tmp = " кВт/ч. ";
         return tmp;
     }
 
@@ -169,6 +190,92 @@ public class SigfoxData implements Sigfox {
         this.errorMagnet = errorMagnet;
     }
 
+//------------
+
+    public TypeError getErrorTamper() {
+        return errorTamper;
+    }
+
+    public void setErrorTamper(TypeError errorTamper) {
+        this.errorTamper = errorTamper;
+    }
+
+    public TypeError getErrorFreezing() {
+        return errorFreezing;
+    }
+
+    public void setErrorFreezing(TypeError errorFreezing) {
+        this.errorFreezing = errorFreezing;
+    }
+
+    public TypeError getErrorBatteryAlarm() {
+        return errorBatteryAlarm;
+    }
+
+    public void setErrorBatteryAlarm(TypeError errorBatteryAlarm) {
+        this.errorBatteryAlarm = errorBatteryAlarm;
+    }
+
+
+    public TypeError getErrorOverRange() {
+        return errorOverRange;
+    }
+
+    public void setErrorOverRange(TypeError errorOverRange) {
+        this.errorOverRange = errorOverRange;
+    }
+
+
+    public TypeError getErrorTemperatureAlarm() {
+        return errorTemperatureAlarm;
+    }
+
+    public void setErrorTemperatureAlarm(TypeError errorTemperatureAlarm) {
+        this.errorTemperatureAlarm = errorTemperatureAlarm;
+    }
+
+    public TypeError getErrorEEPROM() {
+        return errorEEPROM;
+    }
+
+    public void setErrorEEPROM(TypeError errorEEPROM) {
+        this.errorEEPROM = errorEEPROM;
+    }
+
+    public TypeError getErrorShortcircuit() {
+        return errorShortcircuit;
+    }
+
+    public void setErrorShortcircuit(TypeError errorShortcircuit) {
+        this.errorShortcircuit = errorShortcircuit;
+    }
+
+    public TypeError getErrorSensorbreak() {
+        return errorSensorbreak;
+    }
+
+    public void setErrorSensorbreak(TypeError errorSensorbreak) {
+        this.errorSensorbreak = errorSensorbreak;
+    }
+
+    public TypeError getErrorTemperatureless() {
+        return errorTemperatureless;
+    }
+
+    public void setErrorTemperatureless(TypeError errorTemperatureless) {
+        this.errorTemperatureless = errorTemperatureless;
+    }
+
+    public TypeError getErrorTemperaturemore() {
+        return errorTemperaturemore;
+    }
+
+    public void setErrorTemperaturemore(TypeError errorTemperaturemore) {
+        this.errorTemperaturemore = errorTemperaturemore;
+    }
+
+    //-------
+
     public int getHardwareRev() {
         return hardwareRev;
     }
@@ -207,6 +314,7 @@ public class SigfoxData implements Sigfox {
 
     public void setBatteryPower(byte batteryPower) {
         //  U = 2 + (bytes[7]>>7) + (bytes[7]&0x7F)/100.
+        System.out.println("----- " + batteryPower);
         float k = (float) (2 + ((batteryPower & 0xFF) >> 7) + (batteryPower & 0x7F) / 100.);
         this.batteryPower = (float) Math.round(k * 100) / 100;
     }
@@ -227,11 +335,11 @@ public class SigfoxData implements Sigfox {
         else if (radioPower == 3) this.radioPower = "Макс.потужність.";
     }
 
-    public Sigfox getStrategy() {
+    public sigfox.Sigfox getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(Sigfox strategy) {
+    public void setStrategy(sigfox.Sigfox strategy) {
         this.strategy = strategy;
     }
 
@@ -301,6 +409,8 @@ public class SigfoxData implements Sigfox {
             return "Лічильник " + id + ". " + type + ". HARDWARE_REV " + hardwareRev + " SOFTWARE_REV " + softwareRev + " Температура модема " + temperature + " С. Напруга батарейкі " + batteryPower + " В. " + "Рівень сигналу радіо модему " + radioPower + ". Коефіцієнт ділення числа імпульсів " + div;
         if (type == TypeMessage.EVENT)
             return "Лічильник " + id + ". " + type + ". "  + remainBatteryLife + errorBurst + errorDry + errorLeak + errorReverse + minFlow + maxFlow + minWaterTemp + minAmbTemp + maxAmbTemp;
+        if (type == TypeMessage.INTERVAL)
+            return "Лічильник " + id + ". " + type + interval + " Показник " + getChan() + format(valueForm,value) + getVUnits()  + errorBurst + errorDry + errorLeak + errorReverse + errorTamper + errorFreezing + errorBatteryAlarm + errorOverRange + errorTemperatureAlarm + errorEEPROM + errorSensorbreak + errorShortcircuit + errorTemperatureless + errorTemperaturemore;
         return "Лічильник " + id + ". Невідомий тип повідомлення. Данні: " + message;
     }
 }

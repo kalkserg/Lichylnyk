@@ -15,19 +15,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import sigfox.Sigfox;
-import ua.utilix.model.Device;
-import ua.utilix.model.SigfoxData;
-import ua.utilix.model.SigfoxParser;
-import ua.utilix.model.Water5;
+import ua.utilix.model.*;
 import ua.utilix.service.*;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 @Controller
@@ -101,11 +97,11 @@ public class myController {
                 if (device.getProtocol().equals("Kamstrup")) {
                     String dec = kamstrupService.findDecodeKey(sigfoxId).getDecodeKey();
                     sigfoxData = sigfoxParser.getData(sigfoxId, data, device.getProtocol(), seqNumber, dec, null);
-                    //device.setDec(kam.getDecodeKey());
                 } else if (device.getProtocol().equals("Water5")) {
                     Water5 startValue = water5Service.findParameters(sigfoxId);
                     sigfoxData = sigfoxParser.getData(sigfoxId, data, device.getProtocol(), seqNumber, null, startValue);
-                    //device.setDec(kam.getDecodeKey());
+                } else if (device.getProtocol().equals("Bove")) {
+                    sigfoxData = sigfoxParser.getData(sigfoxId, data, device.getProtocol(), seqNumber, null, null);
                 } else {
                     sigfoxData = sigfoxParser.getData(sigfoxId, data, device.getProtocol(), seqNumber, null, null);
                 }
@@ -182,23 +178,44 @@ public class myController {
     }
 
 
-    @GetMapping()
-    public String getBody(@RequestBody(required = false) String str, Model model) {
-        System.out.println("GET " + messageIn);
-        System.out.println("GET " + messageOut);
-        model.addAttribute("str", messageIn + messageOut);
-        return "byby";
+//    @GetMapping()
+//    public String getBody(@RequestBody(required = false) String str, Model model) {
+//        System.out.println("GET " + messageIn);
+//        System.out.println("GET " + messageOut);
+//        model.addAttribute("str", messageIn + messageOut);
+//        return "byby";
+//    }
+
+//    @ResponseBody
+    @GetMapping(path = "/api/users")
+    public List<User> listUsers() {
+        return userService.findAllUsers();
     }
 
 
-    private byte[] intToByte(int num) {
-        byte[] bytes = new byte[4];
-        String str = String.valueOf(num);
-        for (int i = 0; i < 4; i++) {
-            bytes[i] = (byte) str.charAt(i);
-            //bytes[i] = (byte)(num >>> (i * 8));
-            System.out.println(num + " " + bytes[i]);
-        }
-        return bytes;
-    }
+//    @GetMapping(path = "/api/users")
+//    public ResponseEntity<?> listUsers() {
+////        log.info("UsersController:  list users");
+//        List<User> resource = userService.findAllUsers();
+//        return ResponseEntity.ok(resource);
+//    }
+
+//    @PostMapping(path = UserLinks.ADD_USER)
+//    public ResponseEntity<?> saveUser(@RequestBody Users user) {
+//        log.info("UsersController:  list users");
+//        Users resource = usersService.saveUser(user);
+//        return ResponseEntity.ok(resource);
+//    }
+
+//
+//    private byte[] intToByte(int num) {
+//        byte[] bytes = new byte[4];
+//        String str = String.valueOf(num);
+//        for (int i = 0; i < 4; i++) {
+//            bytes[i] = (byte) str.charAt(i);
+//            //bytes[i] = (byte)(num >>> (i * 8));
+//            System.out.println(num + " " + bytes[i]);
+//        }
+//        return bytes;
+//    }
 }

@@ -38,10 +38,10 @@ public interface Handler<T> {
     public static final String CALLBACK_MENU_REQUEST = "/menu";
 
     public static final String CALLBACK_VIEWALL_BUTTON = "Всі повідомлення";
-    public static final String CALLBACK_VIEWALL_REQUEST = "/vall";
+    public static final String CALLBACK_VIEWALL_REQUEST = "/allm";
 
     public static final String CALLBACK_VIEWERR_BUTTON = "Тільки помилки";
-    public static final String CALLBACK_VIEWERR_REQUEST = "/verr";
+    public static final String CALLBACK_VIEWERR_REQUEST = "/errm";
 
     public static final String CALLBACK_DEL_BUTTON = "Видалити";
     public static final String CALLBACK_DEL_REQUEST = "/del";

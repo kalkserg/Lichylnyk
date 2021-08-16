@@ -1,6 +1,7 @@
 package ua.utilix.model;
 
 
+import ua.utilix.model.strategy.BoveStrategy;
 import ua.utilix.model.strategy.DefaultStrategy;
 import ua.utilix.model.strategy.KamstrupStrategy;
 import ua.utilix.model.strategy.Water5Strategy;
@@ -18,6 +19,10 @@ public class SigfoxParser {
             else if(dev.equals("Kamstrup")) {
                 sigfoxData.setStrategy(new KamstrupStrategy(sigfoxData));
                 sigfoxData = sigfoxData.getStrategy().parse(id, input, sequence, dec);
+            }
+            else if(dev.equals("Bove")) {
+                sigfoxData.setStrategy(new BoveStrategy(sigfoxData));
+                sigfoxData = sigfoxData.getStrategy().parse(id, input, sequence);
             }
             else {
                 sigfoxData.setStrategy(new DefaultStrategy(sigfoxData));

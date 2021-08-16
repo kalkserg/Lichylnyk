@@ -68,10 +68,20 @@ public interface Sigfox {
             public String toString() {
                 return "Передача за подією";
             }
+        },
+        INTERVAL {
+            @Override
+            public String toString() { return "Передача через інтервал"; }
         }
     }
 
     enum TypeError {
+        NOERROR {
+            @Override
+            public String toString() {
+                return "";
+            }
+        },
         MAGNETE {
             @Override
             public String toString() {
@@ -102,10 +112,64 @@ public interface Sigfox {
                 return "Виявлено реверс! ";
             }
         },
-        NOERROR {
+        TAMPER {
             @Override
             public String toString() {
-                return "";
+                return "Виявлено втручання! ";
+            }
+        },
+        FREEZING {
+            @Override
+            public String toString() {
+                return "Виявлено обмерзання! ";
+            }
+        },
+        BATTERYALARM {
+            @Override
+            public String toString() {
+                return "Виявлено критичний заряд батареї! ";
+            }
+        },
+        OVERRANGE {
+            @Override
+            public String toString() {
+                return "Виявлено перевищення допустимого діапазону! ";
+            }
+        },
+        TEMPERATUREALARM {
+            @Override
+            public String toString() {
+                return "Виявлено перевищення допустимої температури! ";
+            }
+        },
+        EEPROM {
+            @Override
+            public String toString() {
+                return "Виявлено помилку пам'яті! ";
+            }
+        },
+        SHORTCIRCUIT {
+            @Override
+            public String toString() {
+                return "Виявлено замикання температурного датчика! ";
+            }
+        },
+        SENSORBREAK {
+            @Override
+            public String toString() {
+                return "Виявлено несправність температурного датчика! ";
+            }
+        },
+        TEMPERATURELESS {
+            @Override
+            public String toString() {
+                return "Температура води меньша 3 С! ";
+            }
+        },
+        TEMPERATUREMORE {
+            @Override
+            public String toString() {
+                return "Температура води більша 95 С! ";
             }
         }
     }

@@ -64,7 +64,7 @@ public class CallbackQueryHandler implements Handler<CallbackQuery> {
                 device = deviceService.findByIdAndChatId(Id, chatId);
             }
             if(device!=null) {
-                sendMessage(chatBot, chatId, "Видалено " + Id, null, null);
+                sendMessage(chatBot, chatId, "Видалено " + device.getSigfoxName() + " sigfoxId: " + device.getSigfoxId(), null, null);
                 deviceService.delDevice(device);
                 device = null;
             }else{
@@ -103,7 +103,7 @@ public class CallbackQueryHandler implements Handler<CallbackQuery> {
             Id = Long.parseLong(subStr[1]);
             device = deviceService.findById(Id);
             device.setAllMessage(true);
-            sendMessage(chatBot, chatId, "Виконано " + Id, null, null);
+            sendMessage(chatBot, chatId, "Виконано " + device.getSigfoxName() + " sigfoxId: " + device.getSigfoxId(), null, null);
             deviceService.updateDevice(device);
 
         } else if (callbackQuery.getData().equals(CALLBACK_VIEWERR_REQUEST)) {
@@ -124,7 +124,7 @@ public class CallbackQueryHandler implements Handler<CallbackQuery> {
             Id = Long.parseLong(subStr[1]);
             device = deviceService.findById(Id);
             device.setAllMessage(false);
-            sendMessage(chatBot, chatId, "Виконано " + Id, null, null);
+            sendMessage(chatBot, chatId, "Виконано " + device.getSigfoxName() + " sigfoxId: " + device.getSigfoxId(), null, null);
             deviceService.updateDevice(device);
 
         } else if (callbackQuery.getData().equals(CALLBACK_MENU_REQUEST)) {
@@ -150,7 +150,7 @@ public class CallbackQueryHandler implements Handler<CallbackQuery> {
             Id = Long.parseLong(subStr[1]);
             device = deviceService.findById(Id);
             device.setNotified(true);
-            sendMessage(chatBot, chatId, "Підтверджено " + Id, null, null);
+            sendMessage(chatBot, chatId, "Підтверджено " + device.getSigfoxName() + " sigfoxId: " + device.getSigfoxId(), null, null);
             deviceService.updateDevice(device);
 
         } else if (callbackQuery.getData().equals(CALLBACK_LOGOUT_REQUEST)) {

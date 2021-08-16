@@ -317,7 +317,7 @@ public class MessageHandler implements Handler<Message> {
         try {
             devices.forEach(device -> {
                 if (device.getNotified())
-                    sb.append(device.getId())
+                    sb.append(device.getAllMessage()?"\uD83D\uDCAC":"\u26A0")
                             .append(" - <b>")
                             .append(device.getSigfoxName())
                             .append("</b> (")
@@ -327,10 +327,9 @@ public class MessageHandler implements Handler<Message> {
 //                            .append(" chatId: ")
 //                            .append(device.getChatId())
                             .append(") ")
-                            .append(device.getAllMessage()?"\uD83D\uDCAC":"\u26A0")
                             .append("\r\n");
                 else if (!device.getNotified())
-                    sb.append("<s>" + device.getId())
+                    sb.append("<s>")
                             .append(" - <b>")
                             .append(device.getSigfoxName())
                             .append("</b> (")
