@@ -18,6 +18,7 @@ public class Device {
     private Boolean notified = false;
 //    private String dec = "";
 
+
     public Device() {
     }
 

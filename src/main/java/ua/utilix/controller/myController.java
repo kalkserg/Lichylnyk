@@ -33,6 +33,7 @@ public class myController {
     String messageOut = "";
     private UserService userService;
     private DeviceService deviceService;
+    private LocationService locationService;
     private KamstrupService kamstrupService;
     private Water5Service water5Service;
     private SendMessageService sendMessageService;
@@ -48,7 +49,12 @@ public class myController {
     }
 
     @Autowired
-    public void setDeviceService(DeviceService deviceService) {
+    public void setDeviceService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+
+    @Autowired
+    public void setLocationService(DeviceService deviceService) {
         this.deviceService = deviceService;
     }
 
@@ -81,11 +87,23 @@ public class myController {
         messageIn = messageIn + str;
 
         Device[] devices = null;
+
         try {
             devices = deviceService.findBySigfoxId(sigfoxId);
         } catch (Exception e) {
             System.out.println("There is not user");
         }
+
+        Location location = null;
+
+        try {
+            location = locationService.findBySigfoxId(sigfoxId);
+        } catch (Exception e) {
+            System.out.println("There is not location");
+        }
+        if(location==null) location = new Location();
+
+
 
         try {
             for (Device device : devices) {
@@ -159,13 +177,24 @@ public class myController {
                             sigfoxData.getErrorDry().equals(Sigfox.TypeError.DRY) ||
                             sigfoxData.getErrorLeak().equals(Sigfox.TypeError.LEAK) ||
                             sigfoxData.getErrorMagnet().equals(Sigfox.TypeError.MAGNETE) ||
-                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.REVERSE)) {
-                        String message = "\u26A0" + sigfoxData.toString() + coordinateHref + warningToken;
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.REVERSE) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.OVERRANGE) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.BATTERYALARM) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.EEPROM) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.FREEZING) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.SENSORBREAK) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.TAMPER) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.SHORTCIRCUIT) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.TEMPERATUREALARM) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.TEMPERATURELESS) ||
+                            sigfoxData.getErrorReverse().equals(Sigfox.TypeError.TEMPERATUREMORE)
+                    ) {
+                        String message = "\u26A0" + "<b>" + sigfoxName + "</b>: " + location.getAddr() + location.getLocation() + sigfoxData.toString() + coordinateHref + warningToken;
                         sendMessageService.sending(message, device.getChatId());
                     } else {
                         //All messages No err
                         if (device.getAllMessage() == true) {
-                            sendMessageService.sending("\uD83D\uDCAC" + sigfoxData.toString() + warningToken, device.getChatId());
+                            sendMessageService.sending("\uD83D\uDCAC" + "<b>" +sigfoxName + "</b>: " + location.getAddr() + location.getLocation() +  sigfoxData.toString() + warningToken, device.getChatId());
                         }
                     }
                 }

@@ -398,19 +398,19 @@ public class SigfoxData implements Sigfox {
             return str + hh;
         }
         else if (type == TypeMessage.WEEKLY)
-            return "Лічильник " + id + ". " + type + ". Показник " + getChan() + format(valueForm,value) + getVUnits() + " Напруга батарейки " + format(batteryForm,batteryPower) + " В.";
+            return "sigfoxID " + id + ". " + type + ". Показник " + getChan() + format(valueForm,value) + getVUnits() + " Напруга батарейки " + format(batteryForm,batteryPower) + " В.";
         else if (type == TypeMessage.INFO)
-            return "Лічильник " + id + ". " + type + ". Показник " + getChan() + format(valueForm,value) + getVUnits() + " Всього передано " + sendCounter + " повідомлень." + " Рівень сигналу радіо модему " + radioPower + remainBatteryLife + minFlow + maxFlow + minWaterTemp + minAmbTemp + maxAmbTemp;
+            return "sigfoxID " + id + ". " + type + ". Показник " + getChan() + format(valueForm,value) + getVUnits() + " Всього передано " + sendCounter + " повідомлень." + " Рівень сигналу радіо модему " + radioPower + remainBatteryLife + minFlow + maxFlow + minWaterTemp + minAmbTemp + maxAmbTemp;
         else if (type == TypeMessage.EXTENDED)
-            return "Лічильник " + id + ". " + type + ". HARDWARE_REV " + hardwareRev + " SOFTWARE_REV " + softwareRev + " Температура модема " + temperature + "С. Напруга батарейкі " + batteryPower + " В. " + "Рівень сигналу радіо модему " + radioPower + ". Коефіцієнт ділення числа імпульсів " + div;
+            return "sigfoxID " + id + ". " + type + ". HARDWARE_REV " + hardwareRev + " SOFTWARE_REV " + softwareRev + " Температура модема " + temperature + "С. Напруга батарейкі " + batteryPower + " В. " + "Рівень сигналу радіо модему " + radioPower + ". Коефіцієнт ділення числа імпульсів " + div;
         else if (type == TypeMessage.COMMAND)
-            return "Лічильник " + id + ". " + type + (errorMagnet.equals("")?(". Температура модема " + temperature + " С. Напруга батарейкі " + format(batteryForm,batteryPower) + " В. "):(". "+errorMagnet));
+            return "sigfoxID " + id + ". " + type + (errorMagnet.equals("")?(". Температура модема " + temperature + " С. Напруга батарейкі " + format(batteryForm,batteryPower) + " В. "):(". "+errorMagnet));
         else if (type == TypeMessage.RESET)
-            return "Лічильник " + id + ". " + type + ". HARDWARE_REV " + hardwareRev + " SOFTWARE_REV " + softwareRev + " Температура модема " + temperature + " С. Напруга батарейкі " + batteryPower + " В. " + "Рівень сигналу радіо модему " + radioPower + ". Коефіцієнт ділення числа імпульсів " + div;
+            return "sigfoxID " + id + ". " + type + ". HARDWARE_REV " + hardwareRev + " SOFTWARE_REV " + softwareRev + " Температура модема " + temperature + " С. Напруга батарейкі " + batteryPower + " В. " + "Рівень сигналу радіо модему " + radioPower + ". Коефіцієнт ділення числа імпульсів " + div;
         if (type == TypeMessage.EVENT)
-            return "Лічильник " + id + ". " + type + ". "  + remainBatteryLife + errorBurst + errorDry + errorLeak + errorReverse + minFlow + maxFlow + minWaterTemp + minAmbTemp + maxAmbTemp;
+            return "sigfoxID " + id + ". " + type + ". "  + remainBatteryLife + errorBurst + errorDry + errorLeak + errorReverse + minFlow + maxFlow + minWaterTemp + minAmbTemp + maxAmbTemp;
         if (type == TypeMessage.INTERVAL)
-            return "Лічильник " + id + ". " + type + interval + " Показник " + getChan() + format(valueForm,value) + getVUnits()  + errorBurst + errorDry + errorLeak + errorReverse + errorTamper + errorFreezing + errorBatteryAlarm + errorOverRange + errorTemperatureAlarm + errorEEPROM + errorSensorbreak + errorShortcircuit + errorTemperatureless + errorTemperaturemore;
-        return "Лічильник " + id + ". Невідомий тип повідомлення. Данні: " + message;
+            return "sigfoxID " + id + ". " + type + interval + " Показник " + getChan() + format(valueForm,value) + getVUnits()  + errorBurst + errorDry + errorLeak + errorReverse + errorTamper + errorFreezing + errorBatteryAlarm + errorOverRange + errorTemperatureAlarm + errorEEPROM + errorSensorbreak + errorShortcircuit + errorTemperatureless + errorTemperaturemore;
+        return "sigfoxID " + id + ". Невідомий тип повідомлення. Данні: " + message;
     }
 }
